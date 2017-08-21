@@ -15,7 +15,7 @@ const validate_request = (req, res, next) => {
 app.get('/', validate_request, (req, res) => {
     return browser.newPage()
     .then(page => {
-        page.waitForSelector('img');
+        page.waitForSelector('img').then(() => console.log(`Page loaded!`));
         return page.goto(req.query.url);
     })
     .then(response => response.text())
