@@ -19,7 +19,10 @@ app.get('/', validate_request, (req, res) => {
         return page.goto(req.query.url);
     })
     .then(response => response.text())
-    .then(content => res.status(200).send(content));
+    .then(content => {
+        console.log(`Get content`);
+        res.status(200).send(content)
+    });
 })
 
 process.on('beforeExit', () => {
