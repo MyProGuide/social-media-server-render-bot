@@ -1,0 +1,15 @@
+{
+  "name": "social-media-server-render-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ikaros",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.4",
+    "puppeteer": "^0.9.0"
+  }
+}
