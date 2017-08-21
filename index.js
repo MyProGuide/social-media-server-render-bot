@@ -15,7 +15,7 @@ const validate_request = (req, res, next) => {
 app.get('/', validate_request, (req, res) => {
     return browser.newPage()
     .then(page => page.goto(req.query.url))
-    .then(page => page.content())
+    .then(response => response.text())
     .then(content => res.status(200).send(content));
 })
 
