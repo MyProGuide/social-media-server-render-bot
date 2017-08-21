@@ -15,7 +15,7 @@ const validate_request = (req, res, next) => {
 app.get('/', validate_request, (req, res) => {
     return browser.newPage()
     .then(page => {
-        page.waitForSelector('img', {visible: true, timeout: 60000}).then(() => console.log(`Page loaded!`));
+        page.waitForSelector('#loginModal', {visible: true, timeout: 60000}).then(() => console.log(`Page loaded!`));
         return page.goto(req.query.url);
     })
     .then(response => response.text())
