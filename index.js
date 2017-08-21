@@ -2,7 +2,7 @@ const Express = require('express');
 const puppeteer = require('puppeteer');
 
 const app = Express();
-const browser = null;
+let browser = null;
 
 const APP_PORT = process.env.PORT || 10000;
 
