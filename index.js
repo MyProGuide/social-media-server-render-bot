@@ -5,10 +5,10 @@ const app = Express();
 let browser = null;
 
 const APP_PORT = process.env.PORT || 10000;
+const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
 
 const validate_request = (req, res, next) => {
     if (!browser) res.status(500).json({error: 'Browser is not initialized'});
-    if (!req.query.url) res.status(400).json({error: 'No URL provided'});
     else next();
 }
 
@@ -29,7 +29,7 @@ app.get('/', validate_request, (req, res) => {
         page.waitForSelector(`meta[property="og:title"]`)
         .then(async () => res.status(200).send(await getPageContent(page)))
         .catch(err => res.status(500).json({error: 'Render timeout'}));
-        return page.goto(req.query.url);
+        return page.goto(`${PROXY_DOMAIN}${req.originalUrl}`);
     })
     .catch(err => {
         console.error(err);
