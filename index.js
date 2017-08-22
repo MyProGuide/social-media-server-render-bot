@@ -2,7 +2,7 @@ const Express = require('express');
 const puppeteer = require('puppeteer');
 
 const app = Express();
-let browser = null;
+let browser, page = null;
 
 const APP_PORT = process.env.PORT || 10000;
 
@@ -14,14 +14,17 @@ const validate_request = (req, res, next) => {
 
 app.get('/', validate_request, (req, res) => {
     return browser.newPage()
-    .then(page => {
-        page.waitForSelector('#loginModal', {visible: true, timeout: 60000}).then(() => console.log(`Page loaded!`));
-        return page.goto(req.query.url);
+    .then(_page => {
+        return _page.goto(req.query.url, {waitUntil: 'networkidle'})
     })
-    .then(response => response.text())
+    .then(response => _page.content())
     .then(content => {
-        console.log(`Get content`);
-        res.status(200).send(content)
+        console.log(content);
+        return res.status(200).send(content);
+    })
+    .error(err => {
+        console.error(err);
+        return res.status(500).json({error: err});
     });
 })
 
