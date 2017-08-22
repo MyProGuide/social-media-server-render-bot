@@ -5,6 +5,7 @@ const app = Express();
 let browser = null;
 
 const APP_PORT = process.env.PORT || 80;
+const PROXY_SCHEME = process.env.PROXY_SCHEME || 'https';
 const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
 
 const validate_request = (req, res, next) => {
@@ -29,7 +30,7 @@ app.get(/^\/.*/, validate_request, (req, res) => {
         page.waitForSelector(`meta[property="og:title"]`)
         .then(async () => res.status(200).send(await getPageContent(page)))
         .catch(err => res.status(500).json({error: 'Render timeout'}));
-        return page.goto(`${PROXY_DOMAIN}${req.originalUrl}`);
+        return page.goto(`${PROXY_SCHEME}://${PROXY_DOMAIN}${req.originalUrl}`);
     })
     .catch(err => {
         console.error(err);
