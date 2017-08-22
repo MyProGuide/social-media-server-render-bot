@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer');
 const app = Express();
 let browser = null;
 
-const APP_PORT = process.env.PORT || 10000;
+const APP_PORT = process.env.PORT || 80;
 const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
 
 const validate_request = (req, res, next) => {
@@ -23,7 +23,7 @@ const getPageContent = async function(page){
     });
 }
 
-app.get('/', validate_request, (req, res) => {
+app.get(/^\/.*/, validate_request, (req, res) => {
     return browser.newPage()
     .then(page => {
         page.waitForSelector(`meta[property="og:title"]`)
