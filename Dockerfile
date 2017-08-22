@@ -7,6 +7,12 @@ RUN apt-get update && \
                         libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
                         ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 
+RUN npm install -g pm2
+
 COPY *.* /app/
 
-CMD node /app/index.js
+WORKDIR /app
+
+RUN yarn
+
+CMD pm2-docker start -i 0 /app/index.js
