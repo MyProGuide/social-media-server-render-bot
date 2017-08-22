@@ -15,6 +15,7 @@ const validate_request = (req, res, next) => {
 app.get('/', validate_request, (req, res) => {
     return browser.newPage()
     .then(_page => {
+        console.log(_page);
         return _page.goto(req.query.url, {waitUntil: 'networkidle'})
     })
     .then(response => _page.content())
