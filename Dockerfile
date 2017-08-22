@@ -15,4 +15,6 @@ WORKDIR /app
 
 RUN yarn
 
+EXPOSE 10000
+
 CMD pm2-docker start -i 0 /app/index.js
