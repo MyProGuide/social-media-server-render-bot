@@ -2,7 +2,7 @@ const Express = require('express');
 const puppeteer = require('puppeteer');
 
 const app = Express();
-let browser, page = null;
+let browser = null;
 
 const APP_PORT = process.env.PORT || 10000;
 
@@ -12,17 +12,26 @@ const validate_request = (req, res, next) => {
     else next();
 }
 
+const getPageContent = async function(page){
+    return await page.evaluate(() => {
+        let retVal = '';
+        if (document.doctype)
+          retVal = new XMLSerializer().serializeToString(document.doctype);
+        if (document.documentElement)
+          retVal += document.documentElement.outerHTML;
+        return retVal;
+    });
+}
+
 app.get('/', validate_request, (req, res) => {
     return browser.newPage()
-    .then(_page => {
-        console.log(_page.evaluate);
-        return _page.goto(req.query.url, {waitUntil: 'networkidle'})
+    .then(page => {
+        page.waitForSelector(`meta[property="og:title"]`)
+        .then(async () => res.status(200).send(await getPageContent(page)))
+        .catch(err => res.status(500).json({error: 'Render timeout'}));
+        return page.goto(req.query.url);
     })
-    .then(content => {
-        console.log(_page.url);
-        return res.status(200).send(content);
-    })
-    .error(err => {
+    .catch(err => {
         console.error(err);
         return res.status(500).json({error: err});
     });
