@@ -8,7 +8,7 @@ const APP_PORT = process.env.PORT || 80;
 const PROXY_SCHEME = process.env.PROXY_SCHEME || 'https';
 const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
 const SOCIAL_MEDIA_META_TAG = process.env.SOCIAL_MEDIA_META_TAG || `meta[property="og:title"]`;
-const RENDER_WAITING_TIMEOUT = provess.env.RENDER_WAITING_TIMEOUT || 5000;
+const RENDER_WAITING_TIMEOUT = process.env.RENDER_WAITING_TIMEOUT || 5000;
 
 const validate_request = (req, res, next) => {
     if (!browser) res.status(500).json({error: 'Browser is not initialized'});
