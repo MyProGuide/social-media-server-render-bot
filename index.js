@@ -7,6 +7,8 @@ let browser = null;
 const APP_PORT = process.env.PORT || 80;
 const PROXY_SCHEME = process.env.PROXY_SCHEME || 'https';
 const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
+const SOCIAL_MEDIA_META_TAG = process.env.SOCIAL_MEDIA_META_TAG || `meta[property="og:title"]`;
+const RENDER_WAITING_TIMEOUT = provess.env.RENDER_WAITING_TIMEOUT || 5000;
 
 const validate_request = (req, res, next) => {
     if (!browser) res.status(500).json({error: 'Browser is not initialized'});
@@ -27,9 +29,9 @@ const getPageContent = async function(page){
 app.get(/^\/.*/, validate_request, (req, res) => {
     return browser.newPage()
     .then(page => {
-        page.waitForSelector(`meta[property="og:title"]`)
+        page.waitForSelector(SOCIAL_MEDIA_META_TAG, {timeout: RENDER_WAITING_TIMEOUT})
         .then(async () => res.status(200).send(await getPageContent(page)))
-        .catch(err => res.status(500).json({error: 'Render timeout'}));
+        .catch(async err => res.status(200).send(await getPageContent(page)));
         return page.goto(`${PROXY_SCHEME}://${PROXY_DOMAIN}${req.originalUrl}`);
     })
     .catch(err => {
