@@ -31,6 +31,7 @@ app.get(/^\/.*/, validate_request, (req, res) => {
     .then(page => {
         page.waitForSelector(SOCIAL_MEDIA_META_TAG, {timeout: RENDER_WAITING_TIMEOUT})
         .then(async () => res.status(200).send(await getPageContent(page)))
+        .then(() => page.close())
         .catch(async err => res.status(200).send(await getPageContent(page)));
         return page.goto(`${PROXY_SCHEME}://${PROXY_DOMAIN}${req.originalUrl}`);
     })
