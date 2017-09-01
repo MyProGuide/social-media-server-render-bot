@@ -9,6 +9,8 @@ const PROXY_SCHEME = process.env.PROXY_SCHEME || 'https';
 const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
 const SOCIAL_MEDIA_META_TAG = process.env.SOCIAL_MEDIA_META_TAG || `meta[property="og:title"]`;
 const RENDER_WAITING_TIMEOUT = process.env.RENDER_WAITING_TIMEOUT || 5000;
+const PAGE_LOADED_CHECK_METHOD = process.env.PAGE_LOADED_CHECK_METHOD || 'load';
+const NETWORK_IDLE_TIMEOUT = process.env.NETWORK_IDLE_TIMEOUT || 1000;
 
 const validate_request = (req, res, next) => {
     if (!browser) res.status(500).json({error: 'Browser is not initialized'});
@@ -34,7 +36,7 @@ app.get(/^\/.*/, validate_request, (req, res) => {
         page.waitForSelector(SOCIAL_MEDIA_META_TAG, {timeout: RENDER_WAITING_TIMEOUT})
         .then(async () => { res.status(200).send(await getPageContent(page)); page.close(); })
         .catch(async err => { res.status(200).send(await getPageContent(page)); page.close(); });
-        return page.goto(`${PROXY_SCHEME}://${PROXY_DOMAIN}${req.originalUrl}`, {waitUntil: 'networkidle'});
+        return page.goto(`${PROXY_SCHEME}://${PROXY_DOMAIN}${req.originalUrl}`, {waitUntil: PAGE_LOADED_CHECK_METHOD, networkIdleTimeout: NETWORK_IDLE_TIMEOUT});
     })
     .catch(err => {
         console.error(err);
