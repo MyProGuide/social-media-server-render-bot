@@ -9,8 +9,8 @@ const PROXY_SCHEME = process.env.PROXY_SCHEME || 'https';
 const PROXY_DOMAIN = process.env.PROXY_DOMAIN || 'www.myproguide.com';
 const SOCIAL_MEDIA_META_TAG = process.env.SOCIAL_MEDIA_META_TAG || `meta[property="og:title"]`;
 const RENDER_WAITING_TIMEOUT = process.env.RENDER_WAITING_TIMEOUT || 5000;
-const PAGE_LOADED_CHECK_METHOD = process.env.PAGE_LOADED_CHECK_METHOD || 'load';
-const NETWORK_IDLE_TIMEOUT = process.env.NETWORK_IDLE_TIMEOUT || 1000;
+const PAGE_LOADED_CHECK_METHOD = process.env.PAGE_LOADED_CHECK_METHOD || 'networkidle';
+const NETWORK_IDLE_TIMEOUT = process.env.NETWORK_IDLE_TIMEOUT || 1500;
 
 const validate_request = (req, res, next) => {
     if (!browser) res.status(500).json({error: 'Browser is not initialized'});
